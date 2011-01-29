@@ -3,6 +3,7 @@ module Devyn.Factoring.Visualization
          outputFlat,
          outputDot,
          factorDot,
+         ftToDot,
          graphFT
        ) where
 
@@ -35,7 +36,13 @@ factorDot :: (Integral a)
           => a
           -> DotGraph Node
 
-factorDot n = graphToDot gvParams (graphFT $ factorTree (toNFactor n))
+factorDot n = ftToDot $ factorTree (toNFactor n)
+
+ftToDot :: (Integral a)
+        => Tree (NFactor a)
+        -> DotGraph Node
+
+ftToDot t = graphToDot gvParams (graphFT t)
 
 gvParams :: (Integral a)
          => GraphvizParams (NFactor a) el () (NFactor a)
@@ -66,14 +73,18 @@ graphFT n = mkGraph (tNodes n) (tEdges n)
 tNodes :: Tree a
        -> [(Int, a)]
 
-tNodes = reverse . snd . foldl fn (0,[]) . flatten
-  where fn (a,ls) l = (a+1,(a,l):ls)
+tNodes = flatten . numberTree
 
 tEdges :: Tree a
        -> [(Int, Int, ())]
 
-tEdges n = c n'
-  where n' = evalState (mapM (\ a -> do s <- get
-                                        put (s + 1)
-                                        return (s,a)) n) 0
-        c (Node (i,l) cs) = cs >>= (\ ch@(Node (ci,cl) ccs) -> (i,ci,()):(c ch))
+tEdges n = c (numberTree n)
+  where c (Node (i,l) cs) = cs >>= (\ ch@(Node (ci,cl) ccs)
+                                       -> (i,ci,()):(c ch))
+
+numberTree :: Tree a
+           -> Tree (Int, a)
+
+numberTree n = evalState (mapM (\ a -> do s <- get
+                                          put (s + 1)
+                                          return (s,a)) n) 0
