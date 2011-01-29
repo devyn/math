@@ -22,13 +22,13 @@ instance Integral a => Primality a where
   -- 
   -- It's really quite fast now.
   isPrime n
-    | n <= 1     = False
-    | n == 2     = True
-    | n == 3     = True
-    | even n     = False -- not technically necessary, but might be faster
+    |  n <= 1    = False
+    |  n == 2    = True
+    |  n == 3    = True
+    |  even n    = False -- not technically necessary, but might be faster
     |  nd6 (n+1)
     && nd6 (n-1) = False
-    | otherwise  = length fas == 0
+    |  otherwise = length fas == 0
     where d m    = (== 0) . (`mod` m)
           nd6    = not . (d 6)
           sn     = (ceiling . sqrt . fromIntegral) n -- honestly, this could be better
