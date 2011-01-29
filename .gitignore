@@ -3,3 +3,4 @@
 *.o
 bin/
 .DS_Store
+log/
