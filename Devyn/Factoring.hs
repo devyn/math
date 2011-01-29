@@ -14,13 +14,14 @@ module Devyn.Factoring
 import Data.List
 import Data.Tree
 import Devyn.Factoring.NFactor
+import Devyn.Factoring.Primality
 
 -- | Calculate the greatest prime factor of a number.
 gpf :: (Integral a)
     => NFactor a
     -> a
 
-gpf n = maximum $ filter (isPrime . toNFactor) (factors n)
+gpf n = maximum $ filter isPrime (factors n)
 
 -- | Calculate the greatest prime factor of a number up to a limit.  A
 -- possible use for this would be  to calculate the prime factor up to
@@ -31,8 +32,9 @@ gpfUpto :: (Integral a)
         -> a         -- ^ The greatest prime factor.
 
 gpfUpto max n = maximum $ filter (\ x -> x <= max
-                                      && isPrime (toNFactor x)) (factors n)
+                                      && isPrime x) (factors n)
 
+{-
 -- | Simple, inefficient primality test.
 isPrime :: (Integral a)
         => NFactor a
@@ -46,6 +48,7 @@ isPrime n
   | mod nv 3 == 0 = False
   | otherwise     = length (factors n) <= 2
   where        nv = fromNFactor n
+-}
 
 -- | Find the greatest common factor of two numbers.
 gcf :: (Integral a)
@@ -65,7 +68,7 @@ factorTree :: (Integral a)
 
 factorTree n
   | isPrime n = Node n []
-  | otherwise = let f = gpf n
-                    in Node n [Node (toNFactor f) []
-                              ,factorTree (toNFactor
-                                           ((fromNFactor n) `quot` f))]
+  | otherwise = Node n [Node (toNFactor f) []
+                       ,factorTree (toNFactor (nv `quot` f))]
+  where nv = fromNFactor n
+        f  = gpf n

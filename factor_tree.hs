@@ -1,6 +1,6 @@
 -- output a tree of prime factors  for a given natural number. has the
 -- ability to time itself.  currently, without any parallelization, it
--- runs on my 2.26 GHz Intel Core  2 Duo at 3s for the number 27520516
+-- runs on my 2.26 GHz Intel Core  2 Duo at 2.5s for the number 27520516
 -- (which is 5246^2)
 
 import System.Environment
