@@ -1,6 +1,7 @@
 .#*
 *.hi
 *.o
-bin/
+bin/*
+!bin/*.hs
 .DS_Store
 log/
