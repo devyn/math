@@ -23,6 +23,7 @@ processArgs (n : ldir : []) =
                       let le = join "," [n, showFFloat Nothing (time info) ""
                                         ,(show . length . flatten . tree) info, date]
                       appendFile (join "/" [ldir, "record.csv"]) (le++"\n")
+                      putStrLn le
 
 processArgs _ = do mapM (hPutStrLn stderr) usage
                    exitWith (ExitFailure 2)
