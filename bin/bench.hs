@@ -31,7 +31,8 @@ data Info = Info { time :: Double, out :: FilePath, tree :: Tree (NFactor Intege
 
 doFT n odir = do
   start <- getCPUTime
-  end   <- ft `pseq` getCPUTime
+  outputFT ft
+  end   <- getCPUTime
   cor   <- co
   either (return.Left)
     (res $ (fromIntegral (end - start))

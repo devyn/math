@@ -1,6 +1,7 @@
 module Devyn.Factoring.Visualization
        (
          outputFlat,
+         outputFT,
          outputDot,
          factorDot,
          ftToDot,
@@ -22,9 +23,15 @@ outputFlat :: (Integral a)
            => a
            -> IO ()
 
-outputFlat n = putStrLn $ drawTree $ re `fmap` factorTree (toNFactor n)
-  where re n | isPrime n = shows (fromNFactor n) " (prime)"
-             | otherwise = shows (fromNFactor n) " (composite)"
+outputFlat = outputFT . factorTree . toNFactor
+
+outputFT :: (Integral a)
+         => Tree (NFactor a)
+         -> IO ()
+
+outputFT tree = putStrLn $ drawTree $ re `fmap` tree
+  where  re n | isPrime n = shows (fromNFactor n) " (prime)"
+              | otherwise = shows (fromNFactor n) " (composite)"
 
 outputDot :: (Integral a)
           => a
